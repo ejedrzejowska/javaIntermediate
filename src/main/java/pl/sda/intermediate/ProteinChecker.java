@@ -40,11 +40,7 @@ public class ProteinChecker {
             char[] ch2 = s2.toCharArray();
             Arrays.sort(ch1);
             Arrays.sort(ch2);
-            if(Arrays.equals(ch1, ch2)){
-                return true;
-            } else {
-                return false;
-            }
+            return Arrays.equals(ch1, ch2);
         }
     }
 

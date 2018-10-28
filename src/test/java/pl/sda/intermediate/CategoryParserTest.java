@@ -1,9 +1,7 @@
-package pl.sda.intemediate;
+package pl.sda.intermediate;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import pl.sda.intermediate.Category;
-import pl.sda.intermediate.InMemoryCategoryDAO;
 
 import java.util.List;
 
