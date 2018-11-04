@@ -1,5 +1,7 @@
 package pl.sda.intermediate;
 
+import java.util.Map;
+
 public class OnlyOneController {
     private CategoryService categoryService = new CategoryService();
     private UserRegistrationService userRegistrationService = new UserRegistrationService();
@@ -11,7 +13,19 @@ public class OnlyOneController {
     }
 
     public String registerEffect(UserRegistrationDTO userRegistrationDTO){
-        return "register_effect_nazwa_strony";
+        Map<String, String> errorMap = userValidationService.validateUser(userRegistrationDTO);
+        if(errorMap.isEmpty()){
+            try {
+                userRegistrationService.registerUser(userRegistrationDTO);
+            } catch (UserExistsException e) {
+                //fixme;
+                return "registerForm";
+            }
+        } else {
+            //Fixme
+            return "registerForm";
+        }
+        return "registerEffect";
 
     }
 }
