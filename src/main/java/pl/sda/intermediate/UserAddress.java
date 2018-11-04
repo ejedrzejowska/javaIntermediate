@@ -6,7 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 @Builder
 @Getter
-@Setter@NoArgsConstructor
+@Setter
+@NoArgsConstructor
 public class UserAddress {
     private String city;
     private String country;

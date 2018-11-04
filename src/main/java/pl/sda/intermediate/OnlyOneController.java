@@ -1,15 +1,27 @@
 package pl.sda.intermediate;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 import java.util.Map;
-
+@Controller
 public class OnlyOneController {
-    private CategoryService categoryService = new CategoryService();
-    private UserRegistrationService userRegistrationService = new UserRegistrationService();
-    private UserValidationService userValidationService = new UserValidationService();
+    @Autowired
+    private CategoryService categoryService;
+    @Autowired
+    private UserRegistrationService userRegistrationService;
+    @Autowired
+    private UserValidationService userValidationService;
 
-    public String categories(String searchedText){
-        categoryService.filterCategories(searchedText);
-        return "categories";
+    @RequestMapping(value="/categories")
+    public String categories(@RequestParam(required = false) String searchedText, Model model){
+        List<CategoryDTO> categoryDTOS = categoryService.filterCategories(searchedText);
+        model.addAttribute("catsdata", categoryDTOS); //to zostanie wyslane na front
+        return "catspage"; //takiego htmla bedzie szukac nasza aplikacja
     }
 
     public String registerEffect(UserRegistrationDTO userRegistrationDTO){

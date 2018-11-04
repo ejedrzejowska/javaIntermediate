@@ -1,9 +1,11 @@
 package pl.sda.intermediate;
 
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+@Service
 public class CategoryService {
     private InMemoryCategoryDAO inMemoryCategoryDAO = InMemoryCategoryDAO.getInstance();
 
@@ -16,14 +18,14 @@ public class CategoryService {
         return dtoMap.values()
                 .stream()
                 .peek(dto -> dto.setParentCat(dtoMap.get(dto.getParentId())))
-                .map(dto -> populateStateAndOpenParent(dto, searchedText.trim()))
+                .map(dto -> populateStateAndOpenParent(dto, searchedText))
                 .collect(Collectors.toList());
     }
 
     private CategoryDTO populateStateAndOpenParent(CategoryDTO dto, String searchedText) {
-        if (dto.getName().equals(searchedText)) {
-            dto.getCatergoryState().setOpen(true);
-            dto.getCatergoryState().setSelected(true);
+        if (searchedText != null && dto.getName().equals(searchedText)) {
+            dto.getCategoryState().setOpen(true);
+            dto.getCategoryState().setSelected(true);
             openParent(dto);
         }
         return dto;
@@ -34,7 +36,7 @@ public class CategoryService {
         if (parentCat == null) {
             return;
         }
-        parentCat.getCatergoryState().setOpen(true);
+        parentCat.getCategoryState().setOpen(true);
         openParent(parentCat);
     }
 
@@ -44,7 +46,7 @@ public class CategoryService {
         categoryDTO.setParentId(c.getParentId());
         categoryDTO.setDepth(c.getDepth());
         categoryDTO.setName(c.getName());
-        categoryDTO.setCatergoryState(new CatergoryState());
+        categoryDTO.setCategoryState(new CategoryState());
         return categoryDTO;
     }
 }

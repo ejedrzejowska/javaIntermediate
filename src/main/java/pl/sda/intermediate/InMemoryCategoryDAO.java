@@ -35,8 +35,8 @@ public class InMemoryCategoryDAO {
                         .build());
             }
             Map<Integer, List<Category>> categoryMap = new HashMap<>();
-            for (Category category : categories){
-                if(categoryMap.containsKey(category.getDepth())){
+            for (Category category : categories) {
+                if (categoryMap.containsKey(category.getDepth())) {
                     categoryMap.get(category.getDepth()).add(category);
                 } else {
                     List<Category> cats = new ArrayList<>();
@@ -52,21 +52,21 @@ public class InMemoryCategoryDAO {
         return null;
     }
 
-    private void populateParentId(Map<Integer, List<Category>> categoryMap, Integer depth){
-        if(!categoryMap.containsKey(depth)){
+    private void populateParentId(Map<Integer, List<Category>> categoryMap, Integer depth) {
+        if (!categoryMap.containsKey(depth)) {
             return;
         }
         List<Category> children = categoryMap.get(depth);
         for (Category child : children) {
-            if(depth != 0){
+            if (depth != 0) {
                 List<Category> potentialParents = categoryMap.get(depth - 1);
                 int parentId = 0;
                 for (Category potentialParent : potentialParents) {
-                    if(potentialParent.getId() < child.getId() && parentId < potentialParent.getId()){
+                    if (potentialParent.getId() < child.getId() && parentId < potentialParent.getId()) {
                         parentId = potentialParent.getId();
                     }
                 }
-                if(parentId == 0) throw new RuntimeException();
+                if (parentId == 0) throw new RuntimeException();
                 child.setParentId(parentId);
             }
         }
@@ -74,7 +74,7 @@ public class InMemoryCategoryDAO {
     }
 
     private int calculateDepth(String line) {
-        if(line.startsWith(" ")){
+        if (line.startsWith(" ")) {
             return line.split("\\S")[0].length();
         }
         return 0;

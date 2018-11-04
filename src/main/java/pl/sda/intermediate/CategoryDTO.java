@@ -11,6 +11,18 @@ public class CategoryDTO {
     private Integer depth;
     private String name;
     private CategoryDTO parentCat;
-    private CatergoryState catergoryState;
+    private CategoryState categoryState;
 
+    public String getText() {
+        return name;
+    }
+
+    public CategoryState getState() {
+        return categoryState;
+    }
+
+
+    public String getParent(){
+        return parentId == null ? "#" : parentId.toString();
+    }
 }
