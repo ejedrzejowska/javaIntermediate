@@ -23,9 +23,9 @@ public class CategoryService {
     }
 
     private CategoryDTO populateStateAndOpenParent(CategoryDTO dto, String searchedText) {
-        if (searchedText != null && dto.getName().equals(searchedText)) {
-            dto.getCategoryState().setOpen(true);
-            dto.getCategoryState().setSelected(true);
+        if (searchedText != null && dto.getText().equals(searchedText)) {
+            dto.getState().setOpen(true);
+            dto.getState().setSelected(true);
             openParent(dto);
         }
         return dto;
@@ -36,7 +36,7 @@ public class CategoryService {
         if (parentCat == null) {
             return;
         }
-        parentCat.getCategoryState().setOpen(true);
+        parentCat.getState().setOpen(true);
         openParent(parentCat);
     }
 
@@ -45,8 +45,8 @@ public class CategoryService {
         categoryDTO.setId(c.getId());
         categoryDTO.setParentId(c.getParentId());
         categoryDTO.setDepth(c.getDepth());
-        categoryDTO.setName(c.getName());
-        categoryDTO.setCategoryState(new CategoryState());
+        categoryDTO.setText(c.getName());
+        categoryDTO.setState(new CategoryState());
         return categoryDTO;
     }
 }

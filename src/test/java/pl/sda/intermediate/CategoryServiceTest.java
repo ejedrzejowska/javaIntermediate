@@ -21,7 +21,7 @@ class CategoryServiceTest {
             Boolean isOpened = categoryDTOS.stream()
                     .filter(f -> f.getId().equals(closedCategoryID))
                     .findFirst()
-                    .map(m -> m.getCategoryState().isOpen())
+                    .map(m -> m.getState().isOpen())
                     .orElse(null);
             assertFalse(isOpened);
         }
@@ -30,7 +30,7 @@ class CategoryServiceTest {
             Boolean isOpened = categoryDTOS.stream()
                     .filter(f -> f.getId().equals(openCategoryID))
                     .findFirst()
-                    .map(m -> m.getCategoryState().isOpen())
+                    .map(m -> m.getState().isOpen())
                     .orElse(null);
             assertTrue(isOpened);
         }
