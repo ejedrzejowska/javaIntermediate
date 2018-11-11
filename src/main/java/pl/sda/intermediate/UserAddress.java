@@ -1,13 +1,12 @@
 package pl.sda.intermediate;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserAddress {
     private String city;
     private String country;

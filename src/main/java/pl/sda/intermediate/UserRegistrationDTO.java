@@ -1,10 +1,12 @@
 package pl.sda.intermediate;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+@Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserRegistrationDTO {
     private String firstName;
     private String lastName;
@@ -17,4 +19,5 @@ public class UserRegistrationDTO {
     private String birthDate;
     private String pesel;
     private String phone;
+    private boolean preferEmails;
 }

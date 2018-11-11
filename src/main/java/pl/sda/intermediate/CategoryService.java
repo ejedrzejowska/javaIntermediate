@@ -1,13 +1,19 @@
 package pl.sda.intermediate;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 @Service
 public class CategoryService {
     private InMemoryCategoryDAO inMemoryCategoryDAO = InMemoryCategoryDAO.getInstance();
+
+    public List<CategoryDTO> filterOutCategories(String searchedText) {
+        return filterCategories(searchedText).stream().filter(d -> d.getState().isOpen() != true).collect(Collectors.toList());
+    }
 
     public List<CategoryDTO> filterCategories(String searchedText) {
         List<Category> categoryList = inMemoryCategoryDAO.getCategoryList();
@@ -23,7 +29,7 @@ public class CategoryService {
     }
 
     private CategoryDTO populateStateAndOpenParent(CategoryDTO dto, String searchedText) {
-        if (searchedText != null && dto.getText().equals(searchedText)) {
+        if (searchedText != null && dto.getText().equals(searchedText.trim())) {
             dto.getState().setOpen(true);
             dto.getState().setSelected(true);
             openParent(dto);

@@ -1,4 +1,4 @@
-package pl.sda.intermediate;
+package pl.sda.intermediate.others;
 
 import org.junit.jupiter.api.Test;
 

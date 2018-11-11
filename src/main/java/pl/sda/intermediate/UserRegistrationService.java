@@ -24,7 +24,10 @@ public class UserRegistrationService {
         user.setPassword(DigestUtils.sha512Hex(userRegistrationDTO.getPassword()));
         user.setUserAddress(new UserAddress().builder().city(userRegistrationDTO.getCity()).country(userRegistrationDTO.getCountry())
                 .street(userRegistrationDTO.getStreet()).zipCode(userRegistrationDTO.getZipCode()).build());
-        //fixme
+        user.setPesel(userRegistrationDTO.getPesel());
+        user.setBirthDate(userRegistrationDTO.getBirthDate());
+        user.setPhone(userRegistrationDTO.getPhone());
+        user.setPreferEmails(userRegistrationDTO.isPreferEmails());
         return user;
     }
 }

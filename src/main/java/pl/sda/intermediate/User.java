@@ -1,8 +1,10 @@
 package pl.sda.intermediate;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class User {
@@ -11,4 +13,8 @@ public class User {
     private String email;
     private String password;
     private UserAddress userAddress;
+    private String birthDate;
+    private String pesel;
+    private String phone;
+    private boolean preferEmails;
 }
