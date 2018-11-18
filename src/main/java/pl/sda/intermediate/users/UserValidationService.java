@@ -1,11 +1,10 @@
-package pl.sda.intermediate;
+package pl.sda.intermediate.users;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 @Service
 public class UserValidationService {

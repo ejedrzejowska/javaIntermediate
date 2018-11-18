@@ -1,6 +1,5 @@
-package pl.sda.intermediate;
+package pl.sda.intermediate.categories;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,7 +50,7 @@ public class CategoryService {
         categoryDTO.setId(c.getId());
         categoryDTO.setParentId(c.getParentId());
         categoryDTO.setDepth(c.getDepth());
-        categoryDTO.setText(c.getName());
+        categoryDTO.setName(c.getName());
         categoryDTO.setState(new CategoryState());
         return categoryDTO;
     }

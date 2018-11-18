@@ -1,13 +1,16 @@
-package pl.sda.intermediate;
+package pl.sda.intermediate.users;
 
 import lombok.*;
+
+import java.io.Serializable;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class User {
+public class User implements Serializable {
+    private static final Long serialVersionUID = 42L;
     private String firstName;
     private String lastName;
     private String email;

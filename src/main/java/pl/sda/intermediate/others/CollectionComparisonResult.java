@@ -2,17 +2,20 @@ package pl.sda.intermediate.others;
 
 import lombok.Data;
 import org.apache.commons.lang3.NotImplementedException;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Data
-public class CollectionComparisonResult<A,B> {
+public class CollectionComparisonResult<A, B> {
     private LinkedHashSet<A> onlyInFirst = new LinkedHashSet<>();
     private LinkedHashSet<B> onlyInSecond = new LinkedHashSet<>();
-    private Map<A,B> common = new LinkedHashMap<>();
+    private Map<A, B> common = new LinkedHashMap<>();
 
     public boolean isSame() {
-        throw new NotImplementedException("Do dzieła!"); //todo
+        if (onlyInFirst.size() != onlyInSecond.size()) {
+            return false;
+        }
+        return false;
     }
 }

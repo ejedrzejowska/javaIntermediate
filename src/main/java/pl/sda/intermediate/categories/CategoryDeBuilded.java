@@ -1,4 +1,4 @@
-package pl.sda.intermediate;
+package pl.sda.intermediate.categories;
 
 public class CategoryDeBuilded {
     private Integer id;
