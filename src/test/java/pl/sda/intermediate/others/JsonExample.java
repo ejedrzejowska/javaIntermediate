@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;

@@ -20,7 +20,7 @@
            th:if="${@userContextHolder.getUserLoggedIn()}"
            th:text="${@userContextHolder.getUserLoggedIn()}" }></p>
 
-        <div style="float: right" id="openweathermap-widget">
+        <div th:if="${@userContextHolder.getUserLoggedIn()}" style="float: right" id="openweathermap-widget">
 
             <link href="//openweathermap.org/themes/openweathermap/assets/vendor/owm/css/openweathermap-widget-right.min.css"
                   rel="stylesheet">

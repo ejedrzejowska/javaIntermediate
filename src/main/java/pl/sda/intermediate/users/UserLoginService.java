@@ -10,11 +10,13 @@ public class UserLoginService {
     private UserDAO userDAO;
 
     public boolean isLoggedIn(UserLoginDTO userLoginDTO){
-        return userDAO.getUserList().stream()       // nie powinnismy dawac gettera na liste
-                .filter(u -> u.getEmail().equals(userLoginDTO.getLogin()))
-                .findFirst()
-                .map(u -> u.getPasswordHashed().equals(DigestUtils.sha512Hex(userLoginDTO.getPassword())))
-                .orElse(false);
+        return userDAO.verifyPassword(userLoginDTO);
+
+//        return userDAO.getUserList().stream()       // nie powinnismy dawac gettera na liste
+//                .filter(u -> u.getEmail().equals(userLoginDTO.getLogin()))
+//                .findFirst()
+//                .map(u -> u.getPasswordHashed().equals(DigestUtils.sha512Hex(userLoginDTO.getPassword())))
+//                .orElse(false);
     }
 
 }

@@ -2,7 +2,10 @@ package pl.sda.intermediate.categories;
 
 import lombok.Getter;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -16,9 +19,17 @@ public class InMemoryCategoryDAO {
     private static InMemoryCategoryDAO instance;
     @Getter
     private List<Category> categoryList;
+    public static final String CATEGORIES_DATA_TXT = "c:/projects/categories.txt";
+    File file = new File(CATEGORIES_DATA_TXT);
 
     private InMemoryCategoryDAO() {
         categoryList = initializeCategories();
+        try (FileOutputStream fos = new FileOutputStream(file);
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            oos.writeObject(categoryList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private List<Category> initializeCategories() {

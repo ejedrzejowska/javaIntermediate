@@ -22,7 +22,7 @@ public class UserRegistrationService {
         user.setLastName(userRegistrationDTO.getLastName());
         user.setEmail(userRegistrationDTO.getEmail());
         user.setPasswordHashed(DigestUtils.sha512Hex(userRegistrationDTO.getPassword()));
-        user.setUserAddress(new UserAddress().builder().city(userRegistrationDTO.getCity()).country(userRegistrationDTO.getCountry())
+        user.setUserAddress(UserAddress.builder().city(userRegistrationDTO.getCity()).country(userRegistrationDTO.getCountry())
                 .street(userRegistrationDTO.getStreet()).zipCode(userRegistrationDTO.getZipCode()).build());
         user.setPesel(userRegistrationDTO.getPesel());
         user.setBirthDate(userRegistrationDTO.getBirthDate());

@@ -24,8 +24,6 @@ public class OnlyOneController {
     @Autowired
     private UserValidationService userValidationService;
     @Autowired
-    private UserDAO userDAO;
-    @Autowired
     private UserContextHolder userContextHolder;
     @Autowired
     private WeatherService weatherService;
@@ -83,9 +81,16 @@ public class OnlyOneController {
         } else {
             model.addAttribute("form", new UserLoginDTO());
             model.addAttribute("error", "Błąd logowania");
-            return "loginForm";
+            return "login";
         }
     }
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logoutEffect(Model model){
+        model.addAttribute("form", new UserLoginDTO());
+        userContextHolder.logoutUser();
+        return "login";
+    }
+
     @RequestMapping(value="/weather", method = RequestMethod.GET)
     @ResponseBody //wysyła a nie szuka htmla
     public ResponseEntity<String> weather(){
