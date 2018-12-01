@@ -51,8 +51,8 @@ public class GenericHWTest {
         return list.stream().mapToDouble(d -> d.doubleValue()).sum();
     }
 
-//    public static <T, S extends Number> double printSum(List<T> list, T parameter){
-//        return list.stream().filter(l -> l < (T)parameter).mapToDouble(d -> d.doubleValue()).sum();
+//    public static <T, S extends Number> double printSum(List<T> list, int parameter){
+//        return list.stream().filter(l -> (double) l > parameter ).reduce(0, Double::parseDouble);
 //    }
 
     @Test
@@ -71,5 +71,12 @@ public class GenericHWTest {
         List<Double> listDouble = Arrays.asList(1.0, 2.3, 4.5);
         System.out.println(printSum(listInteger));
         System.out.println(printSum(listDouble));
+    }
+
+    @Test
+    public void shouldComparePair(){
+        Pair pair = new Pair(4, "ewa");
+        Pair pair1 = new Pair(4, "ewa");
+        System.out.println(pair.equals(pair1));
     }
 }
