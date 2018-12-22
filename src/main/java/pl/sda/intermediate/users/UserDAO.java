@@ -82,25 +82,62 @@ public class UserDAO {
 
     }
 
-    public User findUserByEmail(UserLoginDTO userLoginDTO) {
-        return getUserList().stream()
-                .filter(u -> u.getEmail().equals(userLoginDTO.getLogin()))
-                .findFirst().orElseThrow(() -> new UserDoesNotExistsException());
+    public User findUserByEmail(String email) {
+        Connection connection = null;
+        String queryUser = "select * from users where email like ?";
+        String queryAddress = "select * from addresses where userId=?";
+        try {
+            connection = getConnection();
+            PreparedStatement userStatement = connection.prepareStatement(queryUser);
+            userStatement.setString(1, email);
+            ResultSet userSet = userStatement.executeQuery();
+
+            if (userSet.next()){
+                PreparedStatement addressStatement = connection.prepareStatement(queryAddress);
+                addressStatement.setInt(1, userSet.getInt("id"));
+                ResultSet addressSet = addressStatement.executeQuery();
+                User user = new User();
+                user.setFirstName(userSet.getString("firstName"));
+                user.setLastName(userSet.getString("lastName"));
+                user.setBirthDate(userSet.getString("birthDate"));
+                user.setEmail(userSet.getString("email"));
+                user.setPasswordHashed(userSet.getString("password"));
+                user.setPesel(userSet.getString("pesel"));
+                user.setPhone(userSet.getString("phone"));
+                user.setPreferEmails(userSet.getBoolean("prefersEmail"));
+                if(addressSet.next()) {
+                    user.setUserAddress(UserAddress.builder()
+                            .city(addressSet.getString("city"))
+                            .country(addressSet.getString("country"))
+                            .zipCode(addressSet.getString("zipCode"))
+                            .street(addressSet.getString("street")).build());
+                }
+                return user;
+//            } else {
+//                throw new UserDoesNotExistsException();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null; // TODO do sprawdzenia
     }
 
     public boolean verifyPassword(UserLoginDTO userLoginDTO) {
         try {
-            return findUserByEmail(userLoginDTO).getPasswordHashed().equals(DigestUtils.sha512Hex(userLoginDTO.getPassword()));
+            return findUserByEmail(userLoginDTO.getLogin()).getPasswordHashed().equals(DigestUtils.sha512Hex(userLoginDTO.getPassword()));
         } catch (UserDoesNotExistsException e) {
             return false;
         }
     }
 
     public User findUserByContext() {
-        return User.builder().userAddress(UserAddress.builder().city("Lodz").country("PL").build()).build();
-//        return getUserList().stream()
-//                .filter(u -> u.getEmail().equals(userContextHolder.getUserLoggedIn()))
-//                .findFirst().orElse(User.builder().userAddress(UserAddress.builder().city("Lodz").country("PL").build()).build());
+        return findUserByEmail(userContextHolder.getUserLoggedIn());
     }
 
     public String getCity() {
@@ -140,30 +177,5 @@ public class UserDAO {
         }
         return dataSource.getConnection();
     }
-
-    private List<User> getUserList() {
-        List<User> userList = new ArrayList<>();
-        String selectUsers = "select * from users";
-        Connection connection = null;
-        try {
-            connection = getConnection();
-            PreparedStatement statement = connection.prepareStatement(selectUsers);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                User user = new User();
-                user.setEmail(resultSet.getString("email"));
-                user.setPasswordHashed(resultSet.getString("password"));
-                userList.add(user);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return userList;
-    }
+    
 }
