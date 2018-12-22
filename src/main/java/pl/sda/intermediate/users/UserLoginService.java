@@ -1,6 +1,5 @@
 package pl.sda.intermediate.users;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
