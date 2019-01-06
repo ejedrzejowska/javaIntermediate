@@ -3,11 +3,14 @@ package pl.sda.intermediate;
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import pl.sda.intermediate.categories.Category;
+import pl.sda.intermediate.categories.CategoryDAO;
 import pl.sda.intermediate.categories.CategoryDTO;
 import pl.sda.intermediate.categories.CategoryService;
 import pl.sda.intermediate.users.UserRegistrationDTO;
 import pl.sda.intermediate.users.UserValidationService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -73,7 +76,13 @@ public class CategoryServiceTest {
 //        System.out.println(errorMap.get("peselValRes"));
         Assertions.assertEquals(0, errorMap.size());
 
-
+    }
+    @Test
+    public void categoryTest(){
+        CategoryDAO categoryDAO = CategoryDAO.getInstance();
+        List<Category> categoryList = new ArrayList<>();
+        categoryList = categoryDAO.getCategoryList();
+        System.out.println(categoryList.get(30).getName());
 
     }
 

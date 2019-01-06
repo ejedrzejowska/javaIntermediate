@@ -6,7 +6,7 @@ public class CategoryDeBuilded {
     private Integer depth;
     private String name;
 
-    @java.beans.ConstructorProperties({"id", "parentId", "depth", "text"})
+    @java.beans.ConstructorProperties({"externalId", "parentId", "depth", "text"})
     CategoryDeBuilded(Integer id, Integer parentId, Integer depth, String name) {
         this.id = id;
         this.parentId = parentId;
@@ -53,7 +53,7 @@ public class CategoryDeBuilded {
         }
 
         public String toString() {
-            return "CategoryDeBuilded.CategoryDeBuildedBuilder(id=" + this.id + ", parentId=" + this.parentId + ", depth=" + this.depth + ", text=" + this.name + ")";
+            return "CategoryDeBuilded.CategoryDeBuildedBuilder(externalId=" + this.id + ", parentId=" + this.parentId + ", depth=" + this.depth + ", text=" + this.name + ")";
         }
     }
 }

@@ -8,14 +8,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
-    private InMemoryCategoryDAO inMemoryCategoryDAO = InMemoryCategoryDAO.getInstance();
+    private CategoryDAO categoryDAO = CategoryDAO.getInstance();
 
     public List<CategoryDTO> filterOutCategories(String searchedText) {
         return filterCategories(searchedText).stream().filter(d -> d.getState().isOpen() != true).collect(Collectors.toList());
     }
 
     public List<CategoryDTO> filterCategories(String searchedText) {
-        List<Category> categoryList = inMemoryCategoryDAO.getCategoryList();
+        List<Category> categoryList = categoryDAO.getCategoryList();
         Map<Integer, CategoryDTO> dtoMap = categoryList.stream()
                 .map(c -> buildCategoryDTO(c))
                 .collect(Collectors.toMap(k -> k.getId(), v -> v));

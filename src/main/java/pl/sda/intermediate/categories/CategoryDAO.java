@@ -1,46 +1,73 @@
 package pl.sda.intermediate.categories;
 
 import lombok.Getter;
-import org.apache.commons.dbcp2.BasicDataSource;
 import pl.sda.intermediate.DataSourceProvider;
 
-import javax.sql.DataSource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.*;
+import java.util.*;
 
-public class InMemoryCategoryDAO {
-    private static InMemoryCategoryDAO instance;
+public class CategoryDAO {
+    private static CategoryDAO instance;
     @Getter
     private List<Category> categoryList;
     public static final String CATEGORIES_DATA_TXT = "c:/projects/categories.txt";
     File file = new File(CATEGORIES_DATA_TXT);
 
-    private InMemoryCategoryDAO() {
-        categoryList = initializeCategories();
-        try (FileOutputStream fos = new FileOutputStream(file);
-             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-            oos.writeObject(categoryList);
-        } catch (IOException e) {
+    private CategoryDAO() {
+//        categoryList = initializeCategories();  //we only need to initialize once to get everything into DB!
+//        try (FileOutputStream fos = new FileOutputStream(file);
+//             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+//            oos.writeObject(categoryList);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        categoryList = initializeCategoryList();
+    }
+
+    private List<Category> initializeCategoryList(){
+        List<Category> categories = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        String query = "select * from categories";
+        try{
+            connection = DataSourceProvider.getConnection();
+            statement = connection.prepareStatement(query);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                Integer parentId = null;
+                if (resultSet.getObject("parentId") != null){
+                    parentId = resultSet.getInt("parentId") - 1;
+                }
+                Category category = Category.builder()
+                        .id(resultSet.getInt("id") - 1)
+                        .name(resultSet.getString("name"))
+                        .depth(resultSet.getInt("depth"))
+                        .parentId(parentId)
+                        .build();
+                categories.add(category);
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            DataSourceProvider.closeRequest(connection, statement, resultSet);
         }
+        return categories;
     }
 
     private List<Category> initializeCategories() {
         Connection connection = null;
-        String query = "insert into categories (name, depth) values (?, ?)"; //TODO dodać parentId
+        PreparedStatement statement = null;
+        String query = "insert into categories (id, name, depth, parentId) values (?, ?, ?, ?)";
         try {
             connection = DataSourceProvider.getConnection();
             List<String> strings = Files.readAllLines(Paths.get(
@@ -50,10 +77,6 @@ public class InMemoryCategoryDAO {
             for (String line : strings) {
                 String name = line.trim();
                 int depth = calculateDepth(line);
-                PreparedStatement statement = connection.prepareStatement(query);
-                statement.setString(1, name);
-                statement.setInt(2, depth);
-                statement.executeUpdate();
                 categories.add(Category.builder()
                         .name(name)
                         .id(counter++)
@@ -71,17 +94,26 @@ public class InMemoryCategoryDAO {
                 }
             }
             populateParentId(categoryMap, 0);
+            for (Category category : categories) {
+//                Field privateParenId = Category.class.getDeclaredField("parentId"); //refleksja
+//                privateParenId.setAccessible(true);
+                statement = connection.prepareStatement(query);
+                statement.setInt(1, category.getId());
+                statement.setString(2,category.getName());
+                statement.setInt(3, category.getDepth());
+//                if(privateParenId.get(category) != null) {
+                if(category.getParentId() != null){
+                    statement.setInt(4, category.getParentId());
+                } else {
+                    statement.setNull(4, Types.INTEGER);
+                }
+                statement.executeUpdate();
+            }
             return categories;
-        } catch (IOException | URISyntaxException | SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            DataSourceProvider.closeRequest(connection, statement);
         }
         return null;
     }
@@ -114,11 +146,11 @@ public class InMemoryCategoryDAO {
         return 0;
     }
 
-    public static InMemoryCategoryDAO getInstance() {
+    public static CategoryDAO getInstance() {
         if (instance == null) {
-            synchronized (InMemoryCategoryDAO.class) {
+            synchronized (CategoryDAO.class) {
                 if (instance == null) {
-                    instance = new InMemoryCategoryDAO();
+                    instance = new CategoryDAO();
                 }
             }
         }
