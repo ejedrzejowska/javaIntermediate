@@ -38,7 +38,7 @@ public class WeatherResult {
     @SerializedName("sys")
     @Expose
     public Sys sys;
-    @SerializedName("id")
+    @SerializedName("externalId")
     @Expose
     public Integer id;
     @SerializedName("name")

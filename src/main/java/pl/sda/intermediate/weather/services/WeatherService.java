@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class WeatherService {
 
-    private String key = "ea900b66f547fd7b23625544873a4200";
+    private static final String KEY = "ea900b66f547fd7b23625544873a4200";
     @Autowired
     private UserDAO userDAO;
 
@@ -26,8 +26,8 @@ public class WeatherService {
                 .build();
 
         OpenWeatherMapJ8 weatherService = retrofit.create(OpenWeatherMapJ8.class);
-//        CompletableFuture<WeatherResult> completableFuture = weatherService.currentByCity(userDAO.getCity(), key, "metric", "pl");
-        CompletableFuture<WeatherResult> completableFuture = weatherService.currentByCity(userDAO.getCity(), key, userDAO.getUnits(), userDAO.getLang());
+        CompletableFuture<WeatherResult> completableFuture = weatherService.currentByCity("London", KEY, "metric", "pl");
+//        CompletableFuture<WeatherResult> completableFuture = weatherService.currentByCity(userDAO.getCity(), KEY, userDAO.getUnits(), userDAO.getLang());
         WeatherResult weatherResult = completableFuture.join();
         return new Gson().toJson(weatherResult);
     }

@@ -13,7 +13,7 @@ public class Sys {
     @SerializedName("type")
     @Expose
     public Integer type;
-    @SerializedName("id")
+    @SerializedName("externalId")
     @Expose
     public Integer id;
     @SerializedName("message")

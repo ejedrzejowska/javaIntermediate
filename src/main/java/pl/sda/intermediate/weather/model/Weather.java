@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class Weather {
 
-    @SerializedName("id")
+    @SerializedName("externalId")
     @Expose
     public Integer id;
     @SerializedName("main")
